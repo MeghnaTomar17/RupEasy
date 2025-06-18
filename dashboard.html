@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard – Rupeezy</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">RupEasy</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li class="dropdown">
+        <div class="profile-dropdown">
+        <button id="profileBtn">Profile ▼</button>
+        <div id="dropdownMenu" class="dropdown-content">
+        <a href="myloans.html">My Loans</a>
+        <a href="myprofile.html">My Profile</a>
+        <a href="#" onclick="logout()">Logout</a>
+        </li>
+      <li><a href="signin.html">Sign In</a></li>
+      <li><a href="signup.html">Sign Up</a></li>
+    </ul>
+  </div>
+</div>
+
+      
+  </nav>
+
+  <!-- Back button -->
+  <a href="javascript:history.back()" class="back-btn">← Back</a>
+
+  <!-- Dashboard Section -->
+  <section class="dashboard">
+    <h2>Welcome back to Rupeezy! 🎉</h2>
+    <div class="dash-grid">
+      <div class="card">
+        <h3>Check Eligibility</h3>
+        <p>Find out if you qualify for a microloan instantly.</p>
+        <a href="checkeligibility.html" class="btn">Check Now</a>
+      </div>
+      <div class="card">
+        <h3>Apply for Loan</h3>
+        <p>Submit your details and get quick disbursement.</p>
+        <a href="#" onclick="handleApplyClick()" class="btn">Apply Now</a>
+      </div>
+      <div class="card">
+        <h3>Loan Status</h3>
+        <p>Track the progress of your existing loan application.</p>
+        <a href="#" class="btn">View Status</a>
+      </div>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
