@@ -43,11 +43,41 @@
 
   <button type="submit" class="btn">Check Eligibility</button>
 </form>
-
 <div id="eligibilityResult" class="result-box"></div>
-
   </section>
 
-  <script src="script.js"></script>
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("eligibilityForm");
+  const resultBox = document.getElementById("eligibilityResult");
+
+  if (form && resultBox) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const income = parseInt(document.getElementById("income").value);
+      const employment = document.getElementById("employment").value;
+      const amount = parseInt(document.getElementById("amount").value);
+
+      let eligible = false;
+
+      if (income >= 10000 && amount <= income * 10 && employment !== "unemployed") {
+        eligible = true;
+      }
+
+      resultBox.style.display = "block";
+      if (eligible) {
+        resultBox.style.backgroundColor = "#27AE60";
+        resultBox.textContent = "✅ Congratulations! You are eligible for a loan.";
+      } else {
+        resultBox.style.backgroundColor = "#E74C3C";
+        resultBox.textContent = "❌ Sorry, you are not eligible at this moment.";
+      }
+    });
+  }
+});
+
+
+</script>
 </body>
 </html>

@@ -125,34 +125,40 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("eligibilityForm");
-  const resultBox = document.getElementById("eligibilityResult");
+  // APPLY PAGE LOGIC
+  const applyForm = document.getElementById("applyForm");
+  const popup = document.getElementById("applyPopup");
+  const okBtn = document.getElementById("applyOkBtn");
 
-  if (form && resultBox) {
-    form.addEventListener("submit", function (e) {
+  if (applyForm) {
+    applyForm.addEventListener("submit", function (e) {
       e.preventDefault();
+      const amount = document.getElementById("loanAmount").value;
 
-      const income = parseInt(document.getElementById("income").value);
-      const employment = document.getElementById("employment").value;
-      const amount = parseInt(document.getElementById("amount").value);
-
-      let eligible = false;
-
-      if (income >= 10000 && amount <= income * 10 && employment !== "unemployed") {
-        eligible = true;
+      if (!amount || isNaN(amount)) {
+        alert("Please enter a valid loan amount.");
+        return;
       }
 
-      resultBox.style.display = "block";
-      if (eligible) {
-        resultBox.style.backgroundColor = "#27AE60";
-        resultBox.textContent = "✅ Congratulations! You are eligible for a loan.";
-      } else {
-        resultBox.style.backgroundColor = "#E74C3C";
-        resultBox.textContent = "❌ Sorry, you are not eligible at this moment.";
-      }
+      const newLoan = {
+        amount: amount,
+        date: new Date().toLocaleDateString(),
+        status: "Pending",
+        dueDate: "To be decided"
+      };
+
+      let loans = JSON.parse(localStorage.getItem("rupeezyLoans")) || [];
+      loans.push(newLoan);
+      localStorage.setItem("rupeezyLoans", JSON.stringify(loans));
+
+      popup.style.display = "flex";
+    });
+
+    okBtn.addEventListener("click", () => {
+      popup.style.display = "none";
+      window.location.href = "myloans.html";
     });
   }
 });
-
-

@@ -22,6 +22,7 @@
   <!-- My Loans Section -->
   <section class="my-loans">
     <h2>My Loan Applications</h2>
+   </section>
     <div class="loan-list">
       <!-- Sample Loan Cards -->
       <div class="loan-card">
@@ -45,8 +46,37 @@
         <p><strong>Reason:</strong> Insufficient credit score</p>
       </div>
     </div>
-  </section>
+ 
 
-  <script src="script.js"></script>
+  <script>
+      document.addEventListener("DOMContentLoaded", () => {
+  // Show loans if on myloans.html
+  if (window.location.pathname.includes("myloans.html")) {
+    const container = document.querySelector(".loan-list");
+    if (!container) return;
+
+    const loans = JSON.parse(localStorage.getItem("rupeezyLoans")) || [];
+
+    container.innerHTML = "";
+
+    if (loans.length === 0) {
+      container.innerHTML = "<p>No loan applications found.</p>";
+      return;
+    }
+
+    loans.forEach(loan => {
+      const card = document.createElement("div");
+      card.className = "loan-card";
+      card.innerHTML = `
+        <h3>₹${loan.amount} Microloan</h3>
+        <p><strong>Date:</strong> ${loan.date}</p>
+        <p><strong>Status:</strong> ${loan.status}</p>
+        <p><strong>Repayment Due:</strong> ${loan.dueDate}</p>
+      `;
+      container.appendChild(card);
+    });
+  }
+});
+  </script>
 </body>
 </html>
