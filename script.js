@@ -50,30 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // SIGN IN FORM VALIDATION
-  if (signinForm) {
-    signinForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      const email = this.email.value.trim();
-      const password = this.password.value;
-
-      if (!email || !password) {
-        alert('Both fields are required!');
-        return;
-      }
-
-      // Simulated check (add real backend check later)
-      if (email === 'test@rupeezy.com' && password === '123456') {
-        alert('Login successful! Redirecting to Dashboard...');
-        localStorage.setItem('isLoggedIn', 'true');
-        window.location.href = 'dashboard.html'; // optional page
-      } else {
-        alert('Invalid credentials. Try again!');
-      }
-    });
-  }
 
 });
+
 
 function handleApplyClick() {
   const isLoggedIn = localStorage.getItem('isLoggedIn');

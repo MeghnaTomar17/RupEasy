@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lender Dashboard – Rupeezy</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">Rupeezy</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#" id="logoutBtn">Logout</a></li>
+    </ul>
+  </nav>
+
+  <section class="dashboard">
+    <h2>Welcome, <span id="lenderName">Lender</span> 👋</h2>
+
+    <!-- Summary Cards -->
+    <div class="summary-cards">
+      <div class="card">
+        <h3>₹50,000</h3>
+        <p>Total Lent</p>
+      </div>
+      <div class="card">
+        <h3>₹4,500</h3>
+        <p>Interest Earned</p>
+      </div>
+      <div class="card">
+        <h3>2</h3>
+        <p>Active Loans</p>
+      </div>
+    </div>
+
+    <!-- Loan Table -->
+    <h3 style="margin-top: 40px;">Loan History</h3>
+    <table class="loan-table">
+      <thead>
+        <tr>
+          <th>Borrower</th>
+          <th>Amount (₹)</th>
+          <th>Status</th>
+          <th>Start Date</th>
+          <th>Due Date</th>
+        </tr>
+      </thead>
+      <tbody id="loanHistory">
+        <!-- Populated by JS -->
+      </tbody>
+    </table>
+  </section>
+
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const lenderName = localStorage.getItem("userName") || "Lender";
+      document.getElementById("lenderName").textContent = lenderName;
+
+      // Fake loan data for now (replace with backend or localStorage later)
+      const loans = [
+        { borrower: "Ramesh", amount: 10000, status: "Repaid", start: "Jan 10, 2024", due: "Feb 10, 2024" },
+        { borrower: "Sita", amount: 20000, status: "Ongoing", start: "May 1, 2024", due: "July 1, 2024" },
+        { borrower: "Aarav", amount: 20000, status: "Repaid", start: "Dec 1, 2023", due: "Feb 1, 2024" }
+      ];
+
+      const loanTable = document.getElementById("loanHistory");
+      loans.forEach(loan => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${loan.borrower}</td>
+          <td>₹${loan.amount}</td>
+          <td>${loan.status}</td>
+          <td>${loan.start}</td>
+          <td>${loan.due}</td>
+        `;
+        loanTable.appendChild(row);
+      });
+
+      // Logout
+      document.getElementById("logoutBtn").addEventListener("click", () => {
+        localStorage.removeItem("isLoggedIn");
+        localStorage.removeItem("userRole");
+        window.location.href = "signin.html";
+      });
+    });
+  </script>
+</body>
+</html>
