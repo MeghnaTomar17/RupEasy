@@ -1,20 +1,4 @@
-// script.js
-// Add this at top of script.js
-document.addEventListener('DOMContentLoaded', () => {
-  const protectedPages = ['dashboard.html', 'apply.html'];
-  const currentPage = window.location.pathname.split('/').pop();
-  
-  if (protectedPages.includes(currentPage)) {
-    const isLoggedIn = localStorage.getItem('isLoggedIn');
-    if (isLoggedIn !== 'true') {
-      alert('Please sign in first.');
-      window.location.href = 'signin.html';
-    }
-  }
-});
 
-
-// SIGN UP FORM VALIDATION
 document.addEventListener('DOMContentLoaded', () => {
   const signupForm = document.getElementById('signupForm');
   const signinForm = document.getElementById('signinForm');
@@ -48,39 +32,28 @@ document.addEventListener('DOMContentLoaded', () => {
       window.location.href = 'signin.html';
     });
   }
-
-  // SIGN IN FORM VALIDATION
-
 });
-
 
 function handleApplyClick() {
-  const isLoggedIn = localStorage.getItem('isLoggedIn');
-  if (isLoggedIn === 'true') {
-    window.location.href = 'apply.html';
+  const name = sessionStorage.getItem("userName");
+  const email = sessionStorage.getItem("userEmail");
+
+  if (name && email) {
+    // Redirect directly — no need to pass name/email in URL
+    window.location.href = "apply.html";
   } else {
-    alert('You must sign in to apply for a loan.');
-    window.location.href = 'signin.html';
+    alert("You must sign in to apply for a loan.");
+    window.location.href = "signin.html";
   }
 }
+
 
 function logout() {
-  localStorage.removeItem('isLoggedIn');
   alert('You have been logged out.');
-  window.location.href = 'index.html';
+  window.location.href = 'signin.html';
 }
-document.addEventListener('DOMContentLoaded', () => {
-  const protectedPages = ['dashboard.html', 'apply.html', 'myloans.html'];
-  const currentPage = window.location.pathname.split('/').pop();
 
-  if (protectedPages.includes(currentPage)) {
-    const isLoggedIn = localStorage.getItem('isLoggedIn');
-    if (isLoggedIn !== 'true') {
-      alert('Please sign in first.');
-      window.location.href = 'signin.html';
-    }
-  }
-});
+
 const profileBtn = document.getElementById("profileBtn");
 const dropdownMenu = document.getElementById("dropdownMenu");
 
@@ -105,39 +78,67 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-document.addEventListener("DOMContentLoaded", () => {
-  // APPLY PAGE LOGIC
-  const applyForm = document.getElementById("applyForm");
-  const popup = document.getElementById("applyPopup");
-  const okBtn = document.getElementById("applyOkBtn");
+  document.addEventListener("DOMContentLoaded", async () => {
+    const email = sessionStorage.getItem("userEmail");
 
-  if (applyForm) {
-    applyForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-      const amount = document.getElementById("loanAmount").value;
+    if (!email) {
+      alert("Please sign in first.");
+      window.location.href = "signin.html";
+      return;
+    }
 
-      if (!amount || isNaN(amount)) {
-        alert("Please enter a valid loan amount.");
-        return;
+    const form = document.getElementById("profileForm");
+
+    // Fetch profile data
+    try {
+      const res = await fetch(`http://localhost:5000/api/profile?email=${encodeURIComponent(email)}`);
+      const user = await res.json();
+
+      if (user) {
+        document.getElementById("name").value = user.name || "";
+        document.getElementById("email").value = user.email || "";
+        document.getElementById("phone").value = user.phone || "";
+        document.getElementById("aadhar").value = user.aadhar || "";
       }
+    } catch (err) {
+      console.error("Failed to fetch profile:", err);
+      alert("Could not load your profile.");
+    }
 
-      const newLoan = {
-        amount: amount,
-        date: new Date().toLocaleDateString(),
-        status: "Pending",
-        dueDate: "To be decided"
+    // Handle form submission 
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const updatedProfile = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value, // won't change email in DB ideally
+        phone: document.getElementById("phone").value,
+        aadhar: document.getElementById("aadhar").value
       };
 
-      let loans = JSON.parse(localStorage.getItem("rupeezyLoans")) || [];
-      loans.push(newLoan);
-      localStorage.setItem("rupeezyLoans", JSON.stringify(loans));
+      try {
+        const res = await fetch("http://localhost:5000/api/profile/update", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedProfile)
+        });
 
-      popup.style.display = "flex";
-    });
+        const data = await res.json();
 
-    okBtn.addEventListener("click", () => {
-      popup.style.display = "none";
-      window.location.href = "myloans.html";
+        if (res.ok) {
+          alert("Profile updated successfully!");
+        } else {
+          alert("Update failed: " + (data.error || "Unknown error"));
+        }
+      } catch (err) {
+        console.error("Update error:", err);
+        alert("Something went wrong while updating.");
+      }
     });
+  });
+
+  function logout() {
+    sessionStorage.clear();
+    window.location.href = "signin.html";
   }
-});
+
