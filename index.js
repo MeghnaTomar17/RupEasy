@@ -9,7 +9,7 @@ const mongoose = require("mongoose");
 
 mongoose
   .connect(
-    "mongodb+srv://rupeasy:rupeasy1234@rupeasy.kb70txj.mongodb.net/rupeasy?retryWrites=true&w=majority&appName=rupeasy"
+    "mongodb+srv://meghnatomar_db_user:<meghnatomar_db_user>@cluster0.bbap3ln.mongodb.net/?appName=Cluster0"
   )
   .then(() => console.log("Connected to MongoDB Atlas"))
   .catch((err) => console.error("MongoDB connection error:", err));
